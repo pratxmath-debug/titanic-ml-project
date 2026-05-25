@@ -23,7 +23,11 @@ python3 -m pip install -r requirements.txt
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t titanic-app -f docker/Dockerfile .'
+                sh '''
+export PATH=$PATH:/usr/local/bin
+docker --version
+docker build -t titanic-app -f docker/Dockerfile .
+'''
             }
         }
 

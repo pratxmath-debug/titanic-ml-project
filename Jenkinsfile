@@ -3,12 +3,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/pratxmath-debug/titanic-ml-project.git'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
                 sh 'pip install -r requirements.txt'
@@ -33,11 +27,5 @@ pipeline {
             }
         }
 
-        stage('Verify Deployment') {
-            steps {
-                sh 'kubectl get pods'
-                sh 'kubectl get svc'
-            }
-        }
     }
 }

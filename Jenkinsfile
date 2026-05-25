@@ -32,10 +32,10 @@ docker build -t titanic-app -f docker/Dockerfile .
         }
 
         stage('Deploy to Kubernetes') {
-            steps {
-                sh 'kubectl apply -f k8s/'
-            }
-        }
+    steps {
+        sh '/usr/local/bin/kubectl apply -f k8s/'
+    }
+}
 
     }
 }

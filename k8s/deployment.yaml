@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titanic-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: titanic
+  template:
+    metadata:
+      labels:
+        app: titanic
+    spec:
+      containers:
+      - name: titanic
+        image: titanic-app:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000

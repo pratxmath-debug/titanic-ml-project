@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+    }
+
     stages {
 
         stage('Checkout Code') {
@@ -10,16 +14,22 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Check Docker') {
             steps {
-                sh '/usr/local/bin/docker build -t titanic-app ./docker'
+                sh 'which docker'
+                sh 'docker --version'
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Build Docker Image') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
+                sh 'docker build -t titanic-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 5002:5000 titanic-app'
             }
         }
     }

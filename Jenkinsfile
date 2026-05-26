@@ -3,39 +3,41 @@ pipeline {
 
     stages {
 
+        stage('Checkout Code') {
+            steps {
+                git 'https://github.com/pratxmath-debug/titanic-ml-project.git'
+            }
+        }
+
+        stage('Check Python') {
+            steps {
+                sh 'python --version || python3 --version'
+            }
+        }
+
         stage('Install Dependencies') {
             steps {
-                sh '''
-which python3
-python3 --version
-python3 -m ensurepip --upgrade || true
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
-'''
+                sh 'pip install -r requirements.txt || pip3 install -r requirements.txt'
             }
         }
 
         stage('Train Model') {
             steps {
-                sh 'python3 src/train.py'
+                sh 'python train_model.py || python3 train_model.py'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-export PATH=$PATH:/usr/local/bin
-docker --version
-docker build -t titanic-app -f docker/Dockerfile .
-'''
+                sh 'docker build -t titanic-app -f docker/Dockerfile .'
             }
         }
 
         stage('Deploy to Kubernetes') {
-    steps {
-        sh '/usr/local/bin/kubectl apply -f k8s/'
+            steps {
+                sh 'kubectl apply -f k8s/'
+            }
+        }
     }
 }
 
-    }
-}

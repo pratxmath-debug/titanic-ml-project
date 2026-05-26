@@ -1,11 +1,10 @@
-# Use official Python image
 FROM python:3.10
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy project files into container
-COPY . /app
+# Copy all project files
+COPY . .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
@@ -13,5 +12,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Expose Flask port
 EXPOSE 5000
 
-# Run Flask app
+# Start application
 CMD ["python", "api/app.py"]

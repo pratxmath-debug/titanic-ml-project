@@ -1,36 +1,33 @@
-from flask import Flask, request, jsonify
-import joblib
+from flask import Flask, render_template, request
 import numpy as np
+import joblib
 
 app = Flask(__name__)
 
-# Load trained model
-model = joblib.load("model/model.pkl")
+# Load model
+model = joblib.load('model/model.pkl')
 
-@app.route("/")
+@app.route('/')
 def home():
-    return "Titanic Survival Prediction API is running 🚢"
+    return render_template('index.html')
 
-@app.route("/predict", methods=["POST"])
+@app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
+    try:
+        features = [float(x) for x in request.form.values()]
+        final_features = np.array([features])
 
-    features = np.array([[
-        data["Pclass"],
-        data["Age"],
-        data["SibSp"],
-        data["Parch"],
-        data["Fare"],
-        data["Sex_male"],
-        data["Embarked_Q"],
-        data["Embarked_S"]
-    ]])
+        prediction = model.predict(final_features)
 
-    prediction = model.predict(features)[0]
+        if prediction[0] == 1:
+            output = 'Passenger Survived'
+        else:
+            output = 'Passenger Did Not Survive'
 
-    return jsonify({
-        "survived": int(prediction)
-    })
+        return render_template('index.html', prediction_text=output)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    except Exception as e:
+        return str(e)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)

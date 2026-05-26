@@ -20,8 +20,8 @@ df["Embarked"].fillna(df["Embarked"].mode()[0], inplace=True)
 # Encode categorical columns
 df = pd.get_dummies(df, columns=["Sex", "Embarked"], drop_first=True)
 
-features = ["Pclass", "Age", "SibSp", "Parch", "Fare",
-            "Sex_male", "Embarked_Q", "Embarked_S"]
+features = ["Pclass", "Age", "Fare",
+            "Sex_male"]
 
 X = df[features]
 y = df["Survived"]

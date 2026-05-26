@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t titanic-app ./docker'
+                sh '/usr/local/bin/docker build -t titanic-app ./docker'
             }
         }
 

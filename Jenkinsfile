@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/pratxmath-debug/titanic-ml-project.git'
+               git branch: 'main', url: 'https://github.com/pratxmath-debug/titanic-ml-project.git'
             }
         }
 

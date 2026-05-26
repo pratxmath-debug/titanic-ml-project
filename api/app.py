@@ -5,7 +5,7 @@ import joblib
 app = Flask(__name__)
 
 # Load model
-model = joblib.load('model/model.pkl')
+model = joblib.load("model/model.pkl")
 
 @app.route('/')
 def home():
@@ -13,21 +13,22 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    try:
-        features = [float(x) for x in request.form.values()]
-        final_features = np.array([features])
 
-        prediction = model.predict(final_features)
+    features = [
+        float(request.form["Pclass"]),
+        float(request.form["Age"]),
+        float(request.form["Fare"]),
+        float(request.form["Sex"])
+    ]
 
-        if prediction[0] == 1:
-            output = 'Passenger Survived'
-        else:
-            output = 'Passenger Did Not Survive'
+    final_features = np.array([features])
 
-        return render_template('index.html', prediction_text=output)
+    prediction = model.predict(final_features)
 
-    except Exception as e:
-        return str(e)
+    output = "Passenger Survived" if prediction[0] == 1 else "Passenger Did Not Survive"
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    return render_template("index.html", prediction_text=output)
+
+if __name__ == "__main__":
+    # ✅ PORT ADDED HERE
+    app.run(host="0.0.0.0", port=5000, debug=True)
